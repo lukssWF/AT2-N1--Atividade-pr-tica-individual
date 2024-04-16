@@ -1,0 +1,135 @@
+//HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Gastos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gerenciador de Gastos</h1>
+
+    <div id="form-container">
+        <h2>Adicionar Novo Gasto</h2>
+        <input type="text" id="expense-name" placeholder="Nome do Gasto">
+        <input type="number" id="expense-amount" placeholder="Valor do Gasto">
+        <select id="expense-category">
+            <option value="Alimentação">Alimentação</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Outros">Outros</option>
+        </select>
+        <button onclick="addExpense()">Adicionar Gasto</button>
+    </div>
+
+    <div id="expense-list">
+        <h2>Lista de Gastos</h2>
+        <ul id="expenses"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+---------------------------------------------------------------------------------
+//CSS
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#form-container {
+    margin: 20px auto;
+    width: 50%;
+}
+
+input[type="text"], input[type="number"], select, button {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#expense-list {
+    margin: 20px auto;
+    width: 50%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+--------------------------------------------------------------
+//JS
+
+// Definindo a classe Expense para representar cada gasto
+class Expense {
+    constructor(name, amount, category) {
+        this.name = name;
+        this.amount = amount;
+        this.category = category;
+    }
+}
+
+// Inicializando uma lista vazia de gastos
+let expenses = [];
+
+// Função para adicionar um novo gasto à lista
+function addExpense() {
+    const name = document.getElementById('expense-name').value;
+    const amount = parseFloat(document.getElementById('expense-amount').value);
+    const category = document.getElementById('expense-category').value;
+
+    if (name && !isNaN(amount)) {
+        const expense = new Expense(name, amount, category);
+        expenses.push(expense);
+        updateExpenseList();
+        clearInputFields();
+    } else {
+        alert('Por favor, preencha todos os campos corretamente.');
+    }
+}
+
+// Função para limpar os campos de entrada
+function clearInputFields() {
+    document.getElementById('expense-name').value = '';
+    document.getElementById('expense-amount').value = '';
+}
+
+// Função para atualizar a lista de gastos na página
+function updateExpenseList() {
+    const expensesList = document.getElementById('expenses');
+    expensesList.innerHTML = '';
+
+    expenses.forEach(expense => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${expense.name} - R$ ${expense.amount.toFixed(2)} (${expense.category})`;
+        expensesList.appendChild(listItem);
+    });
+}
+
+
